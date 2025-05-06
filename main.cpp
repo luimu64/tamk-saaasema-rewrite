@@ -5,7 +5,6 @@
 
 #include "mqtt.h"
 #include "mqtt_settings.h"
-#include "send_to_rest.h"
 
 std::atomic<unsigned char> tmr_flag;
 

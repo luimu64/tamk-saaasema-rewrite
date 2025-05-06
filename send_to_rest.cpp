@@ -1,10 +1,8 @@
 #include "send_to_rest.h"
-#include "mqtt.h"
+#include <iostream>
 
-using namespace std;
-
-void send_to_Tamk_REST_API(string db_url,
-                           string json_dat) // create URL with CURL library
+void send_to_Tamk_REST_API(std::string db_url,
+                           std::string json_dat) // create URL with CURL library
 {
   CURLcode ret; // URL send return code
   CURL *hnd;    // CURL Handle
@@ -56,7 +54,7 @@ void send_to_Tamk_REST_API(string db_url,
 
   printf("\n");
   printf("\n Server Return code =");
-  cout << ret << endl;
+  std::cout << ret << std::endl;
   printf("\n");
 
   curl_easy_cleanup(hnd);
