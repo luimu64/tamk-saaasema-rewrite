@@ -1,0 +1,37 @@
+[
+  {
+    "label": "Compile debug binary and run",
+    "command": "make debug && ./weather_station_debug",
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "reveal_target": "dock",
+    "shell": "system"
+  },
+  {
+    "label": "Compile release binary",
+    "command": "make",
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "hide": "on_success",
+    "reveal_target": "dock",
+    "shell": "system"
+  },
+  {
+    "label": "Clean up build files",
+    "command": "make clean",
+    "allow_concurrent_runs": false,
+    "use_new_terminal": true,
+    "reveal": "no_focus",
+    "hide": "on_success",
+    "reveal_target": "dock",
+    "shell": "system"
+  },
+  {
+    "label": "Board emulator",
+    "command": "python simulate-board.py",
+    "allow_concurrent_runs": false,
+    "reveal": "always",
+    "reveal_target": "dock",
+    "shell": "system"
+  }
+]
