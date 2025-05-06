@@ -1,3 +1,5 @@
 weather_station
 weather_station_debug
 .ropeproject
+compile_commands.json
+.cache
