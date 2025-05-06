@@ -1,5 +1,3 @@
-#include <cstdio>
-#include <cstring>
 #include <string>
 
 #include <json/json.h>
@@ -9,8 +7,6 @@ using namespace std;
 #include "mqtt.h"
 #include "mqtt_settings.h"
 #include "send_to_rest.h"
-
-std::string mqtt_message;
 
 mqtt::mqtt(const char *id, const char *host, int port) : mosquittopp(id) {
 
@@ -44,25 +40,11 @@ void mqtt::on_subscribe(
 void mqtt::on_message(
     const struct mosquitto_message *message) // on message callback
 {
-
   printf("\n ===================  Message received  "
          "================================ \n");
 
-  char *ptr_c;
-
-  ptr_c = (char *)message->payload; // set char pointer ptr_c to message payload
-
-  mqtt_message = ""; // initiate mqtt message string
-
-  for (int i = 0; i < (message->payloadlen + 1);
-       i++) // copy payload to mqtt_message string
-  {
-    mqtt_message = mqtt_message + *ptr_c;
-
-    // printf("<%c>",*ptr_c);
-
-    ptr_c++;
-  }
+  std::string mqtt_message(static_cast<const char *>(message->payload),
+                           message->payloadlen);
 
   printf("\n 	Topic   = %s", message->topic); // print message topic
 
@@ -73,16 +55,15 @@ void mqtt::on_message(
   if (mqtt_message.size() >= 5 && mqtt_message[0] == 'I' &&
       mqtt_message[1] == 'O' && mqtt_message[2] == 'T' &&
       mqtt_message[3] == 'J' && mqtt_message[4] == 'S') /// ICT course
-
   {
-    ICT_rest();
+    ICT_rest(mqtt_message);
   }; // continue to parsing and sending to db section
 
 } // end of on_message callback
 
 ////////////////////////////////  Parse and send to db  //////////////////////
 
-void mqtt::ICT_rest(void)
+void mqtt::ICT_rest(std::string mqtt_message)
 
 {
 
@@ -95,14 +76,7 @@ void mqtt::ICT_rest(void)
   // 	IOTJS={"S_name":"Temp1","S_value":3.13}
   //
 
-  int i = 0;
-  while (mqtt_message[i] != 0) {
-    mqtt_message[i] =
-        mqtt_message[i + 6]; // remove "IOTJS="  from beging of MQTT message
-    i++;
-  }
-
-  mqtt_message[i] = '\0'; // Pure JSON message left to parsing
+  mqtt_message = mqtt_message.substr(6); // remove "IOTJS=" from message
 
   std::string json_in; // string to parse
   std::string parse_string;
